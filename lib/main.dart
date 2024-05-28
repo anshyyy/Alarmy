@@ -1,7 +1,9 @@
-import 'package:alarmy/src/presentation/screens/home_screen.dart';
-import 'package:alarmy/src/themes/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:wakelock/wakelock.dart';
+
+import 'package:alarmy/src/presentation/screens/home_screen.dart';
+import 'package:alarmy/src/themes/theme.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -9,7 +11,7 @@ void main() {
   SystemChrome.setPreferredOrientations(
           [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight])
       .then((_) {
-    runApp(new MyApp());
+    runApp(const MyApp());
   });
 }
 
@@ -18,6 +20,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Wakelock.enable();
     return MaterialApp(
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
