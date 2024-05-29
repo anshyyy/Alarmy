@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TimerScreen extends StatefulWidget {
   @override
@@ -20,6 +22,10 @@ class _TimerScreenState extends State<TimerScreen> {
   @override
   void initState() {
     super.initState();
+    _getSavedAudioPreference();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showTimePickerDialog();
     });
@@ -100,7 +106,19 @@ class _TimerScreenState extends State<TimerScreen> {
 
   Future<void> _playSound() async {
     await _audioPlayer.setReleaseMode(ReleaseMode.loop);
-    await _audioPlayer.play(AssetSource('sounds/alarm.mp3'));
+    await _audioPlayer.play(AssetSource('sounds/$audio.mp3'));
+  }
+
+  String audio = "alarm";
+
+  void _getSavedAudioPreference() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? audioPref = prefs.getString("audio");
+    if (audioPref != null) {
+      setState(() {
+        audio = audioPref;
+      });
+    }
   }
 
   Future<void> _showStopDialog() async {
@@ -152,7 +170,7 @@ class _TimerScreenState extends State<TimerScreen> {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
+                InkWell(
                   onTap: _handleSingleTap,
                   onDoubleTap: _toggleTimer,
                   child: SizedBox(

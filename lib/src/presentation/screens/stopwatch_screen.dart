@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
+import 'package:flutter/services.dart';
+
 class StopwatchScreen extends StatefulWidget {
   const StopwatchScreen({super.key});
 
@@ -39,6 +41,9 @@ class _StopwatchScreenState extends State<StopwatchScreen> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
     stopwatch = Stopwatch();
 
     t = Timer.periodic(Duration(milliseconds: 30), (timer) {

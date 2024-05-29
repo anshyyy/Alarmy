@@ -5,6 +5,7 @@ import 'package:alarmy/src/presentation/screens/setting_screen.dart';
 import 'package:alarmy/src/presentation/screens/stopwatch_screen.dart';
 import 'package:alarmy/src/presentation/screens/timer_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,15 +24,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _startInactivityTimer();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
   }
 
   void _startInactivityTimer() {
     _inactivityTimer?.cancel();
-    _inactivityTimer = Timer(const Duration(seconds: 10), () {
-      setState(() {
-        _showAppBar = false;
+    if (_option != "Settings") {
+      _inactivityTimer = Timer(const Duration(seconds: 10), () {
+        setState(() {
+          _showAppBar = false;
+        });
       });
-    });
+    } else {
+      setState(() {
+        _showAppBar = true;
+      });
+    }
   }
 
   void _resetInactivityTimer() {
@@ -53,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _option = option;
     });
+    _startInactivityTimer();
   }
 
   Widget bodyWidget(String option) {
@@ -77,8 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         appBar: _showAppBar
             ? AppBar(
+                title: Text(_option == "Settings" ? "Settings" : ""),
                 actions: [
                   PopupMenuButton<String>(
+                    color: const Color(0xFF171514),
                     icon: Icon(Icons.more_vert), // Icon for the button
                     onSelected: _onOptionSelected,
                     itemBuilder: (BuildContext context) {
