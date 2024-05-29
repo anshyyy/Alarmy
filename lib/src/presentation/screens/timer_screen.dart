@@ -224,7 +224,8 @@ class _TimePickerDialogState extends State<TimePickerDialog> {
       String label, FixedExtentScrollController controller, int itemCount) {
     return Column(
       children: [
-        Text(label, style: TextStyle(color: Colors.blueGrey, fontSize: 18)),
+        Text(label,
+            style: const TextStyle(color: Colors.blueGrey, fontSize: 18)),
         Container(
           width: 100,
           height: 150,
